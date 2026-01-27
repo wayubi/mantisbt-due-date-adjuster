@@ -1,0 +1,120 @@
+# MantisBT Due Date Adjuster Plugin
+
+## Description
+
+This plugin adds functionality to MantisBT that allows users to quickly push issue due dates forward by:
+- 1 week
+- 2 weeks  
+- 1 month
+
+The plugin preserves the original time when adjusting the date.
+
+## Features
+
+- **Quick Action Buttons**: Adds buttons directly on the issue view page for quick access
+- **Menu Integration**: Adds options to the issue action menu
+- **Time Preservation**: Maintains the original time (hours and minutes) when adjusting dates
+- **History Tracking**: Logs all due date changes in the issue history
+- **Automatic Notes**: Adds a bugnote documenting the change
+- **Permission Checks**: Only users with update permissions can adjust due dates
+- **Confirmation Dialogs**: Prompts for confirmation before making changes
+
+## Requirements
+
+- MantisBT 2.0.0 or higher
+- PHP 5.6 or higher (for DateTime functionality)
+
+## Installation
+
+1. Download the plugin files
+2. Extract the `DueDateAdjuster` folder
+3. Upload the entire `DueDateAdjuster` folder to your MantisBT `plugins` directory
+4. Log in to MantisBT as an administrator
+5. Navigate to **Manage** → **Manage Plugins**
+6. Find "Due Date Adjuster" in the available plugins list
+7. Click **Install**
+
+## File Structure
+
+```
+DueDateAdjuster/
+├── DueDateAdjuster.php          # Main plugin file
+├── pages/
+│   └── adjust_due_date.php      # Page handling the date adjustment logic
+└── README.md                     # This file
+```
+
+## Usage
+
+### From the Issue View Page
+
+When viewing an issue that has a due date set, you will see three buttons in the issue details:
+
+- **+1 Week**: Pushes the due date forward by 1 week
+- **+2 Weeks**: Pushes the due date forward by 2 weeks  
+- **+1 Month**: Pushes the due date forward by 1 month
+
+Simply click the desired button and confirm the action.
+
+### From the Issue Menu
+
+The same options are also available in the issue action menu (accessible via the dropdown menu on the issue).
+
+## How It Works
+
+1. User clicks one of the adjustment buttons
+2. A confirmation dialog appears
+3. Upon confirmation, the plugin:
+   - Calculates the new due date by adding the selected interval
+   - Preserves the original time (hours and minutes)
+   - Updates the issue with the new due date
+   - Logs the change in the issue history
+   - Adds a private bugnote documenting the change
+4. User is redirected back to the issue view page
+
+## Example
+
+If an issue has a due date of:
+- **Original**: 2026-02-15 14:30:00
+
+And you click "+1 Week", the new due date will be:
+- **New**: 2026-02-22 14:30:00
+
+Notice that the time (14:30:00) is preserved.
+
+## Permissions
+
+Only users with permission to update issues (based on the `update_bug_threshold` configuration) can see and use the due date adjustment features.
+
+## Notes
+
+- The plugin only appears when an issue already has a due date set
+- All changes are logged in the issue history for audit purposes
+- A private bugnote is automatically added to document the change
+- The plugin uses MantisBT's built-in security features
+
+## Troubleshooting
+
+**Q: I don't see the adjustment buttons**
+- Ensure the issue has a due date set
+- Verify you have permission to update the issue
+- Check that the plugin is installed and enabled
+
+**Q: The date isn't adjusting correctly**
+- Verify your server's PHP DateTime functionality is working
+- Check your MantisBT date/time configuration settings
+
+## Support
+
+For issues or questions, please refer to the MantisBT documentation or community forums.
+
+## License
+
+This plugin follows the same license as MantisBT (GPL v2).
+
+## Version History
+
+**1.0.0** - Initial release
+- Basic functionality for adjusting due dates by 1 week, 2 weeks, or 1 month
+- Integration with issue view page and issue menu
+- History tracking and automatic note creation
