@@ -46,6 +46,10 @@ switch ($f_interval) {
         $t_datetime->modify('+1 month');
         $t_interval_text = '1 month';
         break;
+    case '3month':
+        $t_datetime->modify('+3 month');
+        $t_interval_text = '3 month';
+        break;
     default:
         error_parameters('Invalid interval');
         trigger_error(ERROR_GENERIC, ERROR);

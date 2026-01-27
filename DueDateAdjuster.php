@@ -53,6 +53,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
                 <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=2weeks" onclick="return confirm(\'Push due date forward by 2 weeks?\');">+2 Weeks</a>
                 <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=4weeks" onclick="return confirm(\'Push due date forward by 4 weeks?\');">+4 Weeks</a>
                 <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=1month" onclick="return confirm(\'Push due date forward by 1 month?\');">+1 Month</a>
+                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=3month" onclick="return confirm(\'Push due date forward by 3 month?\');">+3 Month</a>
             </div>
         </div>';
         
