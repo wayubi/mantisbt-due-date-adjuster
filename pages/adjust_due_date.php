@@ -38,6 +38,10 @@ switch ($f_interval) {
         $t_datetime->modify('+2 weeks');
         $t_interval_text = '2 weeks';
         break;
+    case '4weeks':
+        $t_datetime->modify('+4 weeks');
+        $t_interval_text = '4 weeks';
+        break;
     case '1month':
         $t_datetime->modify('+1 month');
         $t_interval_text = '1 month';
