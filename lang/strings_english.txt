@@ -1,0 +1,20 @@
+<?php
+/**
+ * MantisBT - Due Date Adjuster Plugin
+ * Language Strings - English
+ */
+
+$s_plugin_DueDateAdjuster_title = 'Due Date Adjuster';
+$s_plugin_DueDateAdjuster_description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
+
+$s_plugin_DueDateAdjuster_push_1week = 'Push Due Date +1 Week';
+$s_plugin_DueDateAdjuster_push_2weeks = 'Push Due Date +2 Weeks';
+$s_plugin_DueDateAdjuster_push_1month = 'Push Due Date +1 Month';
+
+$s_plugin_DueDateAdjuster_confirm_1week = 'Push due date forward by 1 week?';
+$s_plugin_DueDateAdjuster_confirm_2weeks = 'Push due date forward by 2 weeks?';
+$s_plugin_DueDateAdjuster_confirm_1month = 'Push due date forward by 1 month?';
+
+$s_plugin_DueDateAdjuster_quick_adjust = 'Quick Due Date Adjust';
+$s_plugin_DueDateAdjuster_no_due_date = 'No due date set';
+$s_plugin_DueDateAdjuster_invalid_interval = 'Invalid interval';
