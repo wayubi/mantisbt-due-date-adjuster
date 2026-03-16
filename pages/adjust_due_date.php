@@ -22,8 +22,6 @@ if ($t_bug->due_date == '') {
 
 function add_month_with_clamp(DateTime $date, $months) {
     $originalDay = (int)$date->format('j');
-    $daysInOriginalMonth = (int)$date->format('t');
-
     $originalMonth = (int)$date->format('n');
     $originalYear = (int)$date->format('Y');
     $targetMonth = $originalMonth + $months;
@@ -38,11 +36,7 @@ function add_month_with_clamp(DateTime $date, $months) {
     $tempDate->setDate($targetYear, $targetMonth, 1);
     $daysInTargetMonth = (int)$tempDate->format('t');
 
-    $date->modify("+{$months} month");
-
-    if ($originalDay >= $daysInOriginalMonth) {
-        $date->setDate($targetYear, $targetMonth, $daysInTargetMonth);
-    }
+    $date->setDate($targetYear, $targetMonth, min($originalDay, $daysInTargetMonth));
 
     return $date;
 }
