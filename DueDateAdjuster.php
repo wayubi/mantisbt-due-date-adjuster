@@ -9,7 +9,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
     public function register() {
         $this->name = 'Due Date Adjuster';
         $this->description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
-        $this->version = '1.1.0';
+        $this->version = '1.2';
         $this->requires = array(
             'MantisCore' => '2.0.0',
         );
@@ -131,8 +131,13 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         
         $html .= '</ul></div>';
         
-        $t_date_default = date('Y-m-d');
-        $t_time_default = '12:00';
+        if ($t_current_due_date > 1) {
+            $t_date_default = date('Y-m-d', $t_current_due_date);
+            $t_time_default = date('H:i', $t_current_due_date);
+        } else {
+            $t_date_default = date('Y-m-d');
+            $t_time_default = '12:00';
+        }
         
         $html .= '
 <div class="modal fade" id="duedate-custom-modal-' . $p_bug_id . '" tabindex="-1" role="dialog">
