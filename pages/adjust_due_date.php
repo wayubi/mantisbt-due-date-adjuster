@@ -20,6 +20,33 @@ if ($t_bug->due_date == '') {
     trigger_error(ERROR_GENERIC, ERROR);
 }
 
+function add_month_with_clamp(DateTime $date, $months) {
+    $originalDay = (int)$date->format('j');
+    $daysInOriginalMonth = (int)$date->format('t');
+
+    $originalMonth = (int)$date->format('n');
+    $originalYear = (int)$date->format('Y');
+    $targetMonth = $originalMonth + $months;
+    $targetYear = $originalYear;
+
+    while ($targetMonth > 12) {
+        $targetMonth -= 12;
+        $targetYear++;
+    }
+
+    $tempDate = new DateTime();
+    $tempDate->setDate($targetYear, $targetMonth, 1);
+    $daysInTargetMonth = (int)$tempDate->format('t');
+
+    $date->modify("+{$months} month");
+
+    if ($originalDay >= $daysInOriginalMonth) {
+        $date->setDate($targetYear, $targetMonth, $daysInTargetMonth);
+    }
+
+    return $date;
+}
+
 $t_current_due_date = $t_bug->due_date;
 
 $t_interval_map = array(
@@ -28,8 +55,8 @@ $t_interval_map = array(
     '1week' => array('type' => 'modify', 'modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
     '2weeks' => array('type' => 'modify', 'modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),
     '4weeks' => array('type' => 'modify', 'modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
-    '1month' => array('type' => 'modify', 'modifier' => '+1 month', 'text' => plugin_lang_get('push_1month')),
-    '3month' => array('type' => 'modify', 'modifier' => '+3 month', 'text' => plugin_lang_get('push_3months')),
+    '1month' => array('type' => 'add_months', 'months' => 1, 'text' => plugin_lang_get('push_1month')),
+    '3month' => array('type' => 'add_months', 'months' => 3, 'text' => plugin_lang_get('push_3months')),
 );
 
 if (!isset($t_interval_map[$f_interval])) {
@@ -43,6 +70,11 @@ if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = time();
 } elseif ($t_interval_data['type'] === 'today') {
     $t_datetime = new DateTime('today noon');
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'add_months') {
+    $t_datetime = new DateTime();
+    $t_datetime->setTimestamp($t_current_due_date);
+    add_month_with_clamp($t_datetime, $t_interval_data['months']);
     $t_new_due_date = $t_datetime->getTimestamp();
 } else {
     $t_datetime = new DateTime();
