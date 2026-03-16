@@ -88,8 +88,14 @@ $t_interval_data = $t_interval_map[$f_interval];
 if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = time();
 } elseif ($t_interval_data['type'] === 'time_preset') {
-    $t_datetime = new DateTime('today');
-    $t_datetime->setTime($t_interval_data['hour'], 0, 0);
+    if ($t_has_time) {
+        $t_datetime = new DateTime();
+        $t_datetime->setTimestamp($t_current_due_date);
+        $t_datetime->setTime($t_interval_data['hour'], 0, 0);
+    } else {
+        $t_datetime = new DateTime('today');
+        $t_datetime->setTime($t_interval_data['hour'], 0, 0);
+    }
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'today') {
     $t_datetime = new DateTime('today');
