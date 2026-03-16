@@ -24,14 +24,15 @@ $s_plugin_DueDateAdjuster_push_saturday = 'Saturday';
 $s_plugin_DueDateAdjuster_push_sunday = 'Sunday';
 $s_plugin_DueDateAdjuster_push_monday = 'Monday';
 $s_plugin_DueDateAdjuster_push_custom = 'Custom';
+$s_plugin_DueDateAdjuster_push_cleanup = 'Trim Notes';
 
 $s_plugin_DueDateAdjuster_confirm_now = 'Set due date to now?';
-$s_plugin_DueDateAdjuster_confirm_noon = 'Set due date to today at noon?';
 $s_plugin_DueDateAdjuster_confirm_custom = 'Set custom due date?';
+$s_plugin_DueDateAdjuster_confirm_cleanup = 'Keep only the 3 most recent due date notes?';
 
 $s_plugin_DueDateAdjuster_no_due_date = 'No due date set';
 $s_plugin_DueDateAdjuster_invalid_interval = 'Invalid interval';
 $s_plugin_DueDateAdjuster_note = 'Due date pushed forward by %s (from %s to %s)';
 $s_plugin_DueDateAdjuster_note_now = 'Due date set to now (was %s)';
-$s_plugin_DueDateAdjuster_note_noon = 'Due date set to today at noon (was %s)';
 $s_plugin_DueDateAdjuster_note_custom = 'Due date set to %s (was %s)';
+$s_plugin_DueDateAdjuster_note_cleanup = 'Trimmed due date history (kept 3 most recent)';

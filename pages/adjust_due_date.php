@@ -14,8 +14,9 @@ bug_ensure_exists($f_bug_id);
 access_ensure_bug_level(config_get('update_bug_threshold'), $f_bug_id);
 
 $t_bug = bug_get($f_bug_id);
+$t_current_due_date = $t_bug->due_date;
 
-if (empty($t_bug->due_date)) {
+if ($f_interval !== 'cleanup' && empty($t_current_due_date)) {
     error_parameters(plugin_lang_get('no_due_date'));
     trigger_error(ERROR_GENERIC, ERROR);
 }
@@ -71,6 +72,7 @@ $t_interval_map = array(
     '3month' => array('type' => 'add_months', 'months' => 3, 'text' => plugin_lang_get('push_3months')),
     '1year' => array('type' => 'modify', 'modifier' => '+1 year', 'text' => plugin_lang_get('push_1year')),
     'custom' => array('type' => 'custom', 'text' => plugin_lang_get('push_custom')),
+    'cleanup' => array('type' => 'cleanup', 'text' => plugin_lang_get('push_cleanup')),
 );
 
 if (!isset($t_interval_map[$f_interval])) {
@@ -110,6 +112,8 @@ if ($t_interval_data['type'] === 'now') {
     $f_time = gpc_get_string('time');
     $t_datetime = new DateTime($f_date . ' ' . $f_time);
     $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'cleanup') {
+    // No date calculation needed for cleanup
 } elseif ($t_interval_data['type'] === 'add_months') {
     $t_datetime = new DateTime();
     $t_datetime->setTimestamp($t_current_due_date);
@@ -122,13 +126,17 @@ if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = $t_datetime->getTimestamp();
 }
 
-bug_set_field($f_bug_id, 'due_date', $t_new_due_date);
+if ($t_interval_data['type'] !== 'cleanup') {
+    bug_set_field($f_bug_id, 'due_date', $t_new_due_date);
+}
+
+$t_note_tag = ' #DueDateAdjuster';
 
 if ($t_interval_data['type'] === 'now') {
     $t_note = sprintf(
         plugin_lang_get('note_now'),
         date('Y-m-d H:i', $t_current_due_date)
-    );
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'time_preset') {
     $t_time_labels = array(6 => '6am', 12 => '12pm', 15 => '3pm', 21 => '9pm');
     $t_note = sprintf(
@@ -136,21 +144,21 @@ if ($t_interval_data['type'] === 'now') {
         'today at ' . $t_time_labels[$t_interval_data['hour']],
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
-    );
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'today') {
     $t_note = sprintf(
         plugin_lang_get('note'),
         'today at ' . date('H:i', $t_new_due_date),
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
-    );
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'tomorrow') {
     $t_note = sprintf(
         plugin_lang_get('note'),
         'tomorrow at ' . date('H:i', $t_new_due_date),
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
-    );
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'day_of_week') {
     $dayNames = array(0 => 'Sunday', 1 => 'Monday', 6 => 'Saturday');
     $t_note = sprintf(
@@ -158,20 +166,46 @@ if ($t_interval_data['type'] === 'now') {
         $dayNames[$t_interval_data['day']] . ' at ' . date('H:i', $t_new_due_date),
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
-    );
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'custom') {
     $t_note = sprintf(
         plugin_lang_get('note_custom'),
         date('Y-m-d H:i', $t_new_due_date),
         date('Y-m-d H:i', $t_current_due_date)
-    );
+    ) . $t_note_tag;
+} elseif ($t_interval_data['type'] === 'cleanup') {
+    $t_tag = '#DueDateAdjuster';
+    $t_query = "SELECT b.id, b.date_submitted FROM {bugnote} b
+                JOIN {bugnote_text} t ON b.bugnote_text_id = t.id
+                WHERE b.bug_id = " . db_param() . " AND t.note LIKE " . db_param() . "
+                ORDER BY b.date_submitted DESC";
+    $t_result = db_query($t_query, array($f_bug_id, '%' . $t_tag));
+    
+    $t_notes_to_keep = array();
+    $t_notes_to_delete = array();
+    $t_count = 0;
+    
+    while ($t_row = db_fetch_array($t_result)) {
+        $t_count++;
+        if ($t_count <= 3) {
+            $t_notes_to_keep[] = $t_row['id'];
+        } else {
+            $t_notes_to_delete[] = $t_row['id'];
+        }
+    }
+    
+    foreach ($t_notes_to_delete as $t_note_id) {
+        bugnote_delete($t_note_id);
+    }
+    
+    $t_note = plugin_lang_get('note_cleanup') . $t_note_tag;
 } else {
     $t_note = sprintf(
         plugin_lang_get('note'),
         $t_interval_data['text'],
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
-    );
+    ) . $t_note_tag;
 }
 
 bugnote_add(

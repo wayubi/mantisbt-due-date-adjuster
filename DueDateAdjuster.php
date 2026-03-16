@@ -60,6 +60,8 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '1month' => plugin_lang_get('push_1month'),
             '3month' => plugin_lang_get('push_3months'),
             '1year' => plugin_lang_get('push_1year'),
+            'custom' => plugin_lang_get('push_custom'),
+            'cleanup' => plugin_lang_get('push_cleanup'),
         );
         
         $t_current_due_date = $t_bug->due_date;
@@ -90,6 +92,8 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '1month' => plugin_lang_get('confirm_1month'),
             '3month' => plugin_lang_get('confirm_3months'),
             '1year' => plugin_lang_get('confirm_1year'),
+            'custom' => plugin_lang_get('confirm_custom'),
+            'cleanup' => plugin_lang_get('confirm_cleanup'),
         );
         
         $t_page = plugin_page('adjust_due_date');
@@ -117,7 +121,10 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         
         $html .= '<li class="divider"></li>
             <li><a href="#" data-toggle="modal" data-target="#duedate-custom-modal-' . $p_bug_id . '">' 
-               . plugin_lang_get('push_custom') . '</a></li>';
+               . plugin_lang_get('push_custom') . '</a></li>
+            <li><a href="' . $t_page . '&bug_id=' . $p_bug_id . '&interval=cleanup" 
+               onclick="return confirm(\'' . addslashes(plugin_lang_get('confirm_cleanup')) . '\');">' 
+               . plugin_lang_get('push_cleanup') . '</a></li>';
         
         $html .= '</ul></div>';
         
