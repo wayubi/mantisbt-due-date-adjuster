@@ -51,6 +51,8 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             'evening' => plugin_lang_get('push_evening'),
             'today' => plugin_lang_get('push_today'),
             'tomorrow' => plugin_lang_get('push_tomorrow'),
+            'end_of_month' => plugin_lang_get('push_end_of_month'),
+            'friday' => plugin_lang_get('push_friday'),
             'saturday' => plugin_lang_get('push_saturday'),
             'sunday' => plugin_lang_get('push_sunday'),
             'monday' => plugin_lang_get('push_monday'),
@@ -83,6 +85,8 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             'evening' => 'Set due date to today at 9pm?',
             'today' => 'Set due date to today at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'tomorrow' => 'Set due date to tomorrow at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'end_of_month' => 'Set due date to end of month at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'friday' => 'Set due date to Friday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'saturday' => 'Set due date to Saturday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'sunday' => 'Set due date to Sunday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'monday' => 'Set due date to Monday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
@@ -106,6 +110,9 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         
         foreach ($t_lang_strings as $t_interval => $t_label) {
             if ($t_interval === 'today') {
+                $html .= '<li class="divider"></li>';
+            }
+            if ($t_interval === 'friday') {
                 $html .= '<li class="divider"></li>';
             }
             if ($t_interval === '1week') {

@@ -62,6 +62,8 @@ $t_interval_map = array(
     'evening' => array('type' => 'time_preset', 'hour' => 21, 'text' => plugin_lang_get('push_evening')),
     'today' => array('type' => 'today', 'text' => plugin_lang_get('push_today')),
     'tomorrow' => array('type' => 'tomorrow', 'text' => plugin_lang_get('push_tomorrow')),
+    'end_of_month' => array('type' => 'end_of_month', 'text' => plugin_lang_get('push_end_of_month')),
+    'friday' => array('type' => 'day_of_week', 'day' => 5, 'text' => plugin_lang_get('push_friday')),
     'saturday' => array('type' => 'day_of_week', 'day' => 6, 'text' => plugin_lang_get('push_saturday')),
     'sunday' => array('type' => 'day_of_week', 'day' => 0, 'text' => plugin_lang_get('push_sunday')),
     'monday' => array('type' => 'day_of_week', 'day' => 1, 'text' => plugin_lang_get('push_monday')),
@@ -94,6 +96,12 @@ if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'tomorrow') {
     $t_datetime = new DateTime('tomorrow');
+    $t_datetime->setTime($t_hour, $t_minute, 0);
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'end_of_month') {
+    $t_datetime = new DateTime('today');
+    $t_days_in_month = (int)$t_datetime->format('t');
+    $t_datetime->setDate((int)$t_datetime->format('Y'), (int)$t_datetime->format('m'), $t_days_in_month);
     $t_datetime->setTime($t_hour, $t_minute, 0);
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'day_of_week') {
@@ -159,8 +167,15 @@ if ($t_interval_data['type'] === 'now') {
         date('Y-m-d H:i', $t_current_due_date),
         date('Y-m-d H:i', $t_new_due_date)
     ) . $t_note_tag;
+} elseif ($t_interval_data['type'] === 'end_of_month') {
+    $t_note = sprintf(
+        plugin_lang_get('note'),
+        'end of month at ' . date('H:i', $t_new_due_date),
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
+    ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'day_of_week') {
-    $dayNames = array(0 => 'Sunday', 1 => 'Monday', 6 => 'Saturday');
+    $dayNames = array(0 => 'Sunday', 1 => 'Monday', 5 => 'Friday', 6 => 'Saturday');
     $t_note = sprintf(
         plugin_lang_get('note'),
         $dayNames[$t_interval_data['day']] . ' at ' . date('H:i', $t_new_due_date),
