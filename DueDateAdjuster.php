@@ -35,7 +35,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
     function menu_issue($p_event, $p_bug_id) {
         $t_bug = bug_get($p_bug_id);
         
-        if ($t_bug->due_date == '') {
+        if (empty($t_bug->due_date)) {
             return array();
         }
         
@@ -45,7 +45,15 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         
         $t_lang_strings = array(
             'now' => plugin_lang_get('push_now'),
+            'morning' => plugin_lang_get('push_morning'),
+            'noon' => plugin_lang_get('push_noon'),
+            'afternoon' => plugin_lang_get('push_afternoon'),
+            'evening' => plugin_lang_get('push_evening'),
             'today' => plugin_lang_get('push_today'),
+            'tomorrow' => plugin_lang_get('push_tomorrow'),
+            'saturday' => plugin_lang_get('push_saturday'),
+            'sunday' => plugin_lang_get('push_sunday'),
+            'monday' => plugin_lang_get('push_monday'),
             '1week' => plugin_lang_get('push_1week'),
             '2weeks' => plugin_lang_get('push_2weeks'),
             '4weeks' => plugin_lang_get('push_4weeks'),
@@ -54,9 +62,28 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '1year' => plugin_lang_get('push_1year'),
         );
         
+        $t_current_due_date = $t_bug->due_date;
+        $t_has_time = !empty($t_current_due_date);
+        $t_time_str = $t_has_time ? date('H:i', $t_current_due_date) : '12:00';
+        
+        $t_time_presets = array(
+            'morning' => '6am',
+            'noon' => '12pm',
+            'afternoon' => '3pm',
+            'evening' => '9pm',
+        );
+        
         $t_confirm_strings = array(
             'now' => plugin_lang_get('confirm_now'),
-            'today' => plugin_lang_get('confirm_today'),
+            'morning' => 'Set due date to today at 6am?',
+            'noon' => 'Set due date to today at noon?',
+            'afternoon' => 'Set due date to today at 3pm?',
+            'evening' => 'Set due date to today at 9pm?',
+            'today' => 'Set due date to today at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'tomorrow' => 'Set due date to tomorrow at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'saturday' => 'Set due date to Saturday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'sunday' => 'Set due date to Sunday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            'monday' => 'Set due date to Monday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             '1week' => plugin_lang_get('confirm_1week'),
             '2weeks' => plugin_lang_get('confirm_2weeks'),
             '4weeks' => plugin_lang_get('confirm_4weeks'),
@@ -66,7 +93,6 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         );
         
         $t_page = plugin_page('adjust_due_date');
-        $t_bug_url = string_get_bug_view_url($p_bug_id);
         
         $html = '<div class="btn-group duedate-adjuster">
             <button type="button" class="btn btn-primary btn-sm" data-toggle="dropdown">
@@ -75,6 +101,12 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             <ul class="dropdown-menu" role="menu">';
         
         foreach ($t_lang_strings as $t_interval => $t_label) {
+            if ($t_interval === 'today') {
+                $html .= '<li class="divider"></li>';
+            }
+            if ($t_interval === '1week') {
+                $html .= '<li class="divider"></li>';
+            }
             $t_confirm = $t_confirm_strings[$t_interval];
             $html .= '<li>
                 <a href="' . $t_page . '&bug_id=' . $p_bug_id . '&interval=' . $t_interval . '" 

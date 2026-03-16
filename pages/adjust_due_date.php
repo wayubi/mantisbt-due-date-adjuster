@@ -15,7 +15,7 @@ access_ensure_bug_level(config_get('update_bug_threshold'), $f_bug_id);
 
 $t_bug = bug_get($f_bug_id);
 
-if ($t_bug->due_date == '') {
+if (empty($t_bug->due_date)) {
     error_parameters(plugin_lang_get('no_due_date'));
     trigger_error(ERROR_GENERIC, ERROR);
 }
@@ -49,10 +49,21 @@ function add_month_with_clamp(DateTime $date, $months) {
 }
 
 $t_current_due_date = $t_bug->due_date;
+$t_has_time = !empty($t_current_due_date);
+$t_hour = $t_has_time ? (int)date('H', $t_current_due_date) : 12;
+$t_minute = $t_has_time ? (int)date('i', $t_current_due_date) : 0;
 
 $t_interval_map = array(
     'now' => array('type' => 'now', 'text' => plugin_lang_get('push_now')),
+    'morning' => array('type' => 'time_preset', 'hour' => 6, 'text' => plugin_lang_get('push_morning')),
+    'noon' => array('type' => 'time_preset', 'hour' => 12, 'text' => plugin_lang_get('push_noon')),
+    'afternoon' => array('type' => 'time_preset', 'hour' => 15, 'text' => plugin_lang_get('push_afternoon')),
+    'evening' => array('type' => 'time_preset', 'hour' => 21, 'text' => plugin_lang_get('push_evening')),
     'today' => array('type' => 'today', 'text' => plugin_lang_get('push_today')),
+    'tomorrow' => array('type' => 'tomorrow', 'text' => plugin_lang_get('push_tomorrow')),
+    'saturday' => array('type' => 'day_of_week', 'day' => 6, 'text' => plugin_lang_get('push_saturday')),
+    'sunday' => array('type' => 'day_of_week', 'day' => 0, 'text' => plugin_lang_get('push_sunday')),
+    'monday' => array('type' => 'day_of_week', 'day' => 1, 'text' => plugin_lang_get('push_monday')),
     '1week' => array('type' => 'modify', 'modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
     '2weeks' => array('type' => 'modify', 'modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),
     '4weeks' => array('type' => 'modify', 'modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
@@ -71,8 +82,28 @@ $t_interval_data = $t_interval_map[$f_interval];
 
 if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = time();
+} elseif ($t_interval_data['type'] === 'time_preset') {
+    $t_datetime = new DateTime('today');
+    $t_datetime->setTime($t_interval_data['hour'], 0, 0);
+    $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'today') {
-    $t_datetime = new DateTime('today noon');
+    $t_datetime = new DateTime('today');
+    $t_datetime->setTime($t_hour, $t_minute, 0);
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'tomorrow') {
+    $t_datetime = new DateTime('tomorrow');
+    $t_datetime->setTime($t_hour, $t_minute, 0);
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'day_of_week') {
+    $t_datetime = new DateTime('today');
+    $targetDay = $t_interval_data['day'];
+    $currentDay = (int)$t_datetime->format('w');
+    $daysUntil = $targetDay - $currentDay;
+    if ($daysUntil <= 0) {
+        $daysUntil += 7;
+    }
+    $t_datetime->modify("+{$daysUntil} days");
+    $t_datetime->setTime($t_hour, $t_minute, 0);
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'custom') {
     $f_date = gpc_get_string('date');
@@ -98,10 +129,35 @@ if ($t_interval_data['type'] === 'now') {
         plugin_lang_get('note_now'),
         date('Y-m-d H:i', $t_current_due_date)
     );
+} elseif ($t_interval_data['type'] === 'time_preset') {
+    $t_time_labels = array(6 => '6am', 12 => '12pm', 15 => '3pm', 21 => '9pm');
+    $t_note = sprintf(
+        plugin_lang_get('note'),
+        'today at ' . $t_time_labels[$t_interval_data['hour']],
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
+    );
 } elseif ($t_interval_data['type'] === 'today') {
     $t_note = sprintf(
-        plugin_lang_get('note_today'),
-        date('Y-m-d H:i', $t_current_due_date)
+        plugin_lang_get('note'),
+        'today at ' . date('H:i', $t_new_due_date),
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
+    );
+} elseif ($t_interval_data['type'] === 'tomorrow') {
+    $t_note = sprintf(
+        plugin_lang_get('note'),
+        'tomorrow at ' . date('H:i', $t_new_due_date),
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
+    );
+} elseif ($t_interval_data['type'] === 'day_of_week') {
+    $dayNames = array(0 => 'Sunday', 1 => 'Monday', 6 => 'Saturday');
+    $t_note = sprintf(
+        plugin_lang_get('note'),
+        $dayNames[$t_interval_data['day']] . ' at ' . date('H:i', $t_new_due_date),
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
     );
 } elseif ($t_interval_data['type'] === 'custom') {
     $t_note = sprintf(
