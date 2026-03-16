@@ -25,37 +25,58 @@ class DueDateAdjusterPlugin extends MantisPlugin {
     
     function resources($p_event) {
         return '<style>
-            .snooze-dropdown { position: relative; display: inline-block; }
-            .snooze-dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; }
-            .snooze-dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; }
-            .snooze-dropdown-content a:hover { background-color: #f1f1f1; }
-            .snooze-dropdown:hover .snooze-dropdown-content { display: block; }
+            .duedate-adjuster .caret {
+                border-top-color: #6688a6 !important;
+                border-bottom-color: #6688a6 !important;
+            }
         </style>';
     }
     
     function menu_issue($p_event, $p_bug_id) {
         $t_bug = bug_get($p_bug_id);
         
-        // Only show menu if issue has a due date
         if ($t_bug->due_date == '') {
             return array();
         }
         
-        // Check if user has access to update the issue
         if (!access_has_bug_level(config_get('update_bug_threshold'), $p_bug_id)) {
             return array();
         }
         
-        $html = '<div class="snooze-dropdown">
-            <button type="button" class="btn btn-primary btn-white btn-round btn-sm">Due Date</button>
-            <div class="snooze-dropdown-content">
-                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=1week" onclick="return confirm(\'Push due date forward by 1 week?\');">+1 Week</a>
-                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=2weeks" onclick="return confirm(\'Push due date forward by 2 weeks?\');">+2 Weeks</a>
-                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=4weeks" onclick="return confirm(\'Push due date forward by 4 weeks?\');">+4 Weeks</a>
-                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=1month" onclick="return confirm(\'Push due date forward by 1 month?\');">+1 Month</a>
-                <a href="' . plugin_page('adjust_due_date') . '&bug_id=' . $p_bug_id . '&interval=3month" onclick="return confirm(\'Push due date forward by 3 month?\');">+3 Month</a>
-            </div>
-        </div>';
+        $t_lang_strings = array(
+            '1week' => plugin_lang_get('push_1week'),
+            '2weeks' => plugin_lang_get('push_2weeks'),
+            '4weeks' => plugin_lang_get('push_4weeks'),
+            '1month' => plugin_lang_get('push_1month'),
+            '3month' => plugin_lang_get('push_3months'),
+        );
+        
+        $t_confirm_strings = array(
+            '1week' => plugin_lang_get('confirm_1week'),
+            '2weeks' => plugin_lang_get('confirm_2weeks'),
+            '4weeks' => plugin_lang_get('confirm_4weeks'),
+            '1month' => plugin_lang_get('confirm_1month'),
+            '3month' => plugin_lang_get('confirm_3months'),
+        );
+        
+        $t_page = plugin_page('adjust_due_date');
+        
+        $html = '<div class="btn-group duedate-adjuster">
+            <button type="button" class="btn btn-primary btn-white btn-round btn-sm" data-toggle="dropdown">
+                ' . lang_get('due_date') . ' <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">';
+        
+        foreach ($t_lang_strings as $t_interval => $t_label) {
+            $t_confirm = $t_confirm_strings[$t_interval];
+            $html .= '<li>
+                <a href="' . $t_page . '&bug_id=' . $p_bug_id . '&interval=' . $t_interval . '" 
+                   onclick="return confirm(\'' . addslashes($t_confirm) . '\');">' 
+                   . $t_label . '</a>
+            </li>';
+        }
+        
+        $html .= '</ul></div>';
         
         return array($html);
     }

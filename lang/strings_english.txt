@@ -7,14 +7,18 @@
 $s_plugin_DueDateAdjuster_title = 'Due Date Adjuster';
 $s_plugin_DueDateAdjuster_description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
 
-$s_plugin_DueDateAdjuster_push_1week = 'Push Due Date +1 Week';
-$s_plugin_DueDateAdjuster_push_2weeks = 'Push Due Date +2 Weeks';
-$s_plugin_DueDateAdjuster_push_1month = 'Push Due Date +1 Month';
+$s_plugin_DueDateAdjuster_push_1week = '+1 Week';
+$s_plugin_DueDateAdjuster_push_2weeks = '+2 Weeks';
+$s_plugin_DueDateAdjuster_push_4weeks = '+4 Weeks';
+$s_plugin_DueDateAdjuster_push_1month = '+1 Month';
+$s_plugin_DueDateAdjuster_push_3months = '+3 Months';
 
 $s_plugin_DueDateAdjuster_confirm_1week = 'Push due date forward by 1 week?';
 $s_plugin_DueDateAdjuster_confirm_2weeks = 'Push due date forward by 2 weeks?';
+$s_plugin_DueDateAdjuster_confirm_4weeks = 'Push due date forward by 4 weeks?';
 $s_plugin_DueDateAdjuster_confirm_1month = 'Push due date forward by 1 month?';
+$s_plugin_DueDateAdjuster_confirm_3months = 'Push due date forward by 3 months?';
 
-$s_plugin_DueDateAdjuster_quick_adjust = 'Quick Due Date Adjust';
 $s_plugin_DueDateAdjuster_no_due_date = 'No due date set';
 $s_plugin_DueDateAdjuster_invalid_interval = 'Invalid interval';
+$s_plugin_DueDateAdjuster_note = 'Due date pushed forward by %s (from %s to %s)';
