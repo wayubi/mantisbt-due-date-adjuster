@@ -12,6 +12,7 @@ $s_plugin_DueDateAdjuster_push_2weeks = '+2 Weeks';
 $s_plugin_DueDateAdjuster_push_4weeks = '+4 Weeks';
 $s_plugin_DueDateAdjuster_push_1month = '+1 Month';
 $s_plugin_DueDateAdjuster_push_3months = '+3 Months';
+$s_plugin_DueDateAdjuster_push_1year = '+1 Year';
 $s_plugin_DueDateAdjuster_push_now = 'Now';
 $s_plugin_DueDateAdjuster_push_today = 'Today';
 
@@ -20,6 +21,7 @@ $s_plugin_DueDateAdjuster_confirm_2weeks = 'Push due date forward by 2 weeks?';
 $s_plugin_DueDateAdjuster_confirm_4weeks = 'Push due date forward by 4 weeks?';
 $s_plugin_DueDateAdjuster_confirm_1month = 'Push due date forward by 1 month?';
 $s_plugin_DueDateAdjuster_confirm_3months = 'Push due date forward by 3 months?';
+$s_plugin_DueDateAdjuster_confirm_1year = 'Push due date forward by 1 year?';
 $s_plugin_DueDateAdjuster_confirm_now = 'Set due date to now?';
 $s_plugin_DueDateAdjuster_confirm_today = 'Set due date to today at noon?';
 

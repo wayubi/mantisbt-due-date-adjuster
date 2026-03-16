@@ -51,6 +51,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '4weeks' => plugin_lang_get('push_4weeks'),
             '1month' => plugin_lang_get('push_1month'),
             '3month' => plugin_lang_get('push_3months'),
+            '1year' => plugin_lang_get('push_1year'),
         );
         
         $t_confirm_strings = array(
@@ -61,6 +62,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '4weeks' => plugin_lang_get('confirm_4weeks'),
             '1month' => plugin_lang_get('confirm_1month'),
             '3month' => plugin_lang_get('confirm_3months'),
+            '1year' => plugin_lang_get('confirm_1year'),
         );
         
         $t_page = plugin_page('adjust_due_date');

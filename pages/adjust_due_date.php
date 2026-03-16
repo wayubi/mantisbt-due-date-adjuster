@@ -58,6 +58,7 @@ $t_interval_map = array(
     '4weeks' => array('type' => 'modify', 'modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
     '1month' => array('type' => 'add_months', 'months' => 1, 'text' => plugin_lang_get('push_1month')),
     '3month' => array('type' => 'add_months', 'months' => 3, 'text' => plugin_lang_get('push_3months')),
+    '1year' => array('type' => 'modify', 'modifier' => '+1 year', 'text' => plugin_lang_get('push_1year')),
 );
 
 if (!isset($t_interval_map[$f_interval])) {
