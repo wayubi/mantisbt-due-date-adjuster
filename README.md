@@ -2,19 +2,20 @@
 
 ## Description
 
-This plugin adds functionality to MantisBT that allows users to quickly push issue due dates forward by:
-- 1 week
-- 2 weeks
-- 4 weeks
-- 1 month
-- 3 months
+This plugin adds functionality to MantisBT that allows users to quickly adjust issue due dates:
 
-The plugin preserves the original time when adjusting the date.
+- **Set to Now**: Sets due date to current date and time
+- **Set to Today**: Sets due date to today at noon (12:00)
+- **Push Forward**: Add 1 week, 2 weeks, 4 weeks, 1 month, or 3 months to existing due date
+
+The plugin preserves the original time when adjusting the date (except for Now/Today options).
 
 ## Features
 
 - **Quick Action Dropdown**: Adds a dropdown menu on the issue view page
-- **Menu Integration**: Adds options to the issue action menu
+- **Set to Now**: Quickly set due date to current date and time
+- **Set to Today**: Set due date to today at noon
+- **Push Forward Options**: Add 1 week, 2 weeks, 4 weeks, 1 month, or 3 months
 - **Time Preservation**: Maintains the original time (hours and minutes) when adjusting dates
 - **History Tracking**: Logs all due date changes in the issue history
 - **Automatic Notes**: Adds a bugnote documenting the change
@@ -55,6 +56,8 @@ DueDateAdjuster/
 
 When viewing an issue that has a due date set, you will see a dropdown menu in the issue details:
 
+- **Now**: Sets the due date to the current date and time
+- **Today**: Sets the due date to today at noon (12:00)
 - **+1 Week**: Pushes the due date forward by 1 week
 - **+2 Weeks**: Pushes the due date forward by 2 weeks
 - **+4 Weeks**: Pushes the due date forward by 4 weeks
@@ -125,6 +128,10 @@ For issues or questions, please refer to the MantisBT documentation or community
 This plugin follows the same license as MantisBT (GPL v2).
 
 ## Version History
+
+**1.0.2** - Added Now and Today options
+- Added "Now" option to set due date to current date and time
+- Added "Today" option to set due date to today at noon
 
 **1.0.1** - Code quality improvements
 - Added proper internationalization support with language strings

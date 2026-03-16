@@ -21,15 +21,15 @@ if ($t_bug->due_date == '') {
 }
 
 $t_current_due_date = $t_bug->due_date;
-$t_datetime = new DateTime();
-$t_datetime->setTimestamp($t_current_due_date);
 
 $t_interval_map = array(
-    '1week' => array('modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
-    '2weeks' => array('modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),
-    '4weeks' => array('modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
-    '1month' => array('modifier' => '+1 month', 'text' => plugin_lang_get('push_1month')),
-    '3month' => array('modifier' => '+3 month', 'text' => plugin_lang_get('push_3months')),
+    'now' => array('type' => 'now', 'text' => plugin_lang_get('push_now')),
+    'today' => array('type' => 'today', 'text' => plugin_lang_get('push_today')),
+    '1week' => array('type' => 'modify', 'modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
+    '2weeks' => array('type' => 'modify', 'modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),
+    '4weeks' => array('type' => 'modify', 'modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
+    '1month' => array('type' => 'modify', 'modifier' => '+1 month', 'text' => plugin_lang_get('push_1month')),
+    '3month' => array('type' => 'modify', 'modifier' => '+3 month', 'text' => plugin_lang_get('push_3months')),
 );
 
 if (!isset($t_interval_map[$f_interval])) {
@@ -38,18 +38,39 @@ if (!isset($t_interval_map[$f_interval])) {
 }
 
 $t_interval_data = $t_interval_map[$f_interval];
-$t_datetime->modify($t_interval_data['modifier']);
 
-$t_new_due_date = $t_datetime->getTimestamp();
+if ($t_interval_data['type'] === 'now') {
+    $t_new_due_date = time();
+} elseif ($t_interval_data['type'] === 'today') {
+    $t_datetime = new DateTime('today noon');
+    $t_new_due_date = $t_datetime->getTimestamp();
+} else {
+    $t_datetime = new DateTime();
+    $t_datetime->setTimestamp($t_current_due_date);
+    $t_datetime->modify($t_interval_data['modifier']);
+    $t_new_due_date = $t_datetime->getTimestamp();
+}
 
 bug_set_field($f_bug_id, 'due_date', $t_new_due_date);
 
-$t_note = sprintf(
-    plugin_lang_get('note'),
-    $t_interval_data['text'],
-    date('Y-m-d H:i', $t_current_due_date),
-    date('Y-m-d H:i', $t_new_due_date)
-);
+if ($t_interval_data['type'] === 'now') {
+    $t_note = sprintf(
+        plugin_lang_get('note_now'),
+        date('Y-m-d H:i', $t_current_due_date)
+    );
+} elseif ($t_interval_data['type'] === 'today') {
+    $t_note = sprintf(
+        plugin_lang_get('note_today'),
+        date('Y-m-d H:i', $t_current_due_date)
+    );
+} else {
+    $t_note = sprintf(
+        plugin_lang_get('note'),
+        $t_interval_data['text'],
+        date('Y-m-d H:i', $t_current_due_date),
+        date('Y-m-d H:i', $t_new_due_date)
+    );
+}
 
 bugnote_add(
     $f_bug_id,
