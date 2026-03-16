@@ -62,12 +62,10 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '1month' => plugin_lang_get('push_1month'),
             '3month' => plugin_lang_get('push_3months'),
             '1year' => plugin_lang_get('push_1year'),
-            'custom' => plugin_lang_get('push_custom'),
-            'cleanup' => plugin_lang_get('push_cleanup'),
         );
         
         $t_current_due_date = $t_bug->due_date;
-        $t_has_time = !empty($t_current_due_date);
+        $t_has_time = $t_current_due_date > 1;
         $t_time_str = $t_has_time ? date('H:i', $t_current_due_date) : '12:00';
         
         $t_time_presets = array(
@@ -96,8 +94,6 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '1month' => plugin_lang_get('confirm_1month'),
             '3month' => plugin_lang_get('confirm_3months'),
             '1year' => plugin_lang_get('confirm_1year'),
-            'custom' => plugin_lang_get('confirm_custom'),
-            'cleanup' => plugin_lang_get('confirm_cleanup'),
         );
         
         $t_page = plugin_page('adjust_due_date');
