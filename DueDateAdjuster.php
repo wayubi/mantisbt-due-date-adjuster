@@ -23,14 +23,14 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         );
     }
     
-    function resources($p_event) {
-        return '<style>
-            .duedate-adjuster .caret {
-                border-top-color: #6688a6 !important;
-                border-bottom-color: #6688a6 !important;
-            }
-        </style>';
-    }
+    // function resources($p_event) {
+    //     return '<style>
+    //         .duedate-adjuster .caret {
+    //             border-top-color: #6688a6 !important;
+    //             border-bottom-color: #6688a6 !important;
+    //         }
+    //     </style>';
+    // }
     
     function menu_issue($p_event, $p_bug_id) {
         $t_bug = bug_get($p_bug_id);
@@ -66,9 +66,10 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         );
         
         $t_page = plugin_page('adjust_due_date');
+        $t_bug_url = string_get_bug_view_url($p_bug_id);
         
         $html = '<div class="btn-group duedate-adjuster">
-            <button type="button" class="btn btn-primary btn-white btn-round btn-sm" data-toggle="dropdown">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="dropdown">
                 ' . lang_get('due_date') . ' <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">';
@@ -82,7 +83,44 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             </li>';
         }
         
+        $html .= '<li class="divider"></li>
+            <li><a href="#" data-toggle="modal" data-target="#duedate-custom-modal-' . $p_bug_id . '">' 
+               . plugin_lang_get('push_custom') . '</a></li>';
+        
         $html .= '</ul></div>';
+        
+        $t_date_default = date('Y-m-d');
+        $t_time_default = '12:00';
+        
+        $html .= '
+<div class="modal fade" id="duedate-custom-modal-' . $p_bug_id . '" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">' . plugin_lang_get('push_custom') . '</h4>
+      </div>
+      <form method="post" action="' . $t_page . '">
+        <input type="hidden" name="bug_id" value="' . $p_bug_id . '" />
+        <input type="hidden" name="interval" value="custom" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="date-' . $p_bug_id . '">Date</label>
+            <input type="date" id="date-' . $p_bug_id . '" name="date" class="form-control" value="' . $t_date_default . '" required />
+          </div>
+          <div class="form-group">
+            <label for="time-' . $p_bug_id . '">Time</label>
+            <input type="time" id="time-' . $p_bug_id . '" name="time" class="form-control" value="' . $t_time_default . '" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" name="submit" value="1" class="btn btn-primary">Set Due Date</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>';
         
         return array($html);
     }

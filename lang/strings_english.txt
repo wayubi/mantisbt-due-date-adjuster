@@ -15,6 +15,7 @@ $s_plugin_DueDateAdjuster_push_3months = '+3 Months';
 $s_plugin_DueDateAdjuster_push_1year = '+1 Year';
 $s_plugin_DueDateAdjuster_push_now = 'Now';
 $s_plugin_DueDateAdjuster_push_today = 'Today';
+$s_plugin_DueDateAdjuster_push_custom = 'Custom...';
 
 $s_plugin_DueDateAdjuster_confirm_1week = 'Push due date forward by 1 week?';
 $s_plugin_DueDateAdjuster_confirm_2weeks = 'Push due date forward by 2 weeks?';
@@ -24,9 +25,11 @@ $s_plugin_DueDateAdjuster_confirm_3months = 'Push due date forward by 3 months?'
 $s_plugin_DueDateAdjuster_confirm_1year = 'Push due date forward by 1 year?';
 $s_plugin_DueDateAdjuster_confirm_now = 'Set due date to now?';
 $s_plugin_DueDateAdjuster_confirm_today = 'Set due date to today at noon?';
+$s_plugin_DueDateAdjuster_confirm_custom = 'Set custom due date?';
 
 $s_plugin_DueDateAdjuster_no_due_date = 'No due date set';
 $s_plugin_DueDateAdjuster_invalid_interval = 'Invalid interval';
 $s_plugin_DueDateAdjuster_note = 'Due date pushed forward by %s (from %s to %s)';
 $s_plugin_DueDateAdjuster_note_now = 'Due date set to now (was %s)';
 $s_plugin_DueDateAdjuster_note_today = 'Due date set to today at noon (was %s)';
+$s_plugin_DueDateAdjuster_note_custom = 'Due date set to %s (was %s)';

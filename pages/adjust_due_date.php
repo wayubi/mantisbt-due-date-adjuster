@@ -59,6 +59,7 @@ $t_interval_map = array(
     '1month' => array('type' => 'add_months', 'months' => 1, 'text' => plugin_lang_get('push_1month')),
     '3month' => array('type' => 'add_months', 'months' => 3, 'text' => plugin_lang_get('push_3months')),
     '1year' => array('type' => 'modify', 'modifier' => '+1 year', 'text' => plugin_lang_get('push_1year')),
+    'custom' => array('type' => 'custom', 'text' => plugin_lang_get('push_custom')),
 );
 
 if (!isset($t_interval_map[$f_interval])) {
@@ -72,6 +73,11 @@ if ($t_interval_data['type'] === 'now') {
     $t_new_due_date = time();
 } elseif ($t_interval_data['type'] === 'today') {
     $t_datetime = new DateTime('today noon');
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'custom') {
+    $f_date = gpc_get_string('date');
+    $f_time = gpc_get_string('time');
+    $t_datetime = new DateTime($f_date . ' ' . $f_time);
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'add_months') {
     $t_datetime = new DateTime();
@@ -95,6 +101,12 @@ if ($t_interval_data['type'] === 'now') {
 } elseif ($t_interval_data['type'] === 'today') {
     $t_note = sprintf(
         plugin_lang_get('note_today'),
+        date('Y-m-d H:i', $t_current_due_date)
+    );
+} elseif ($t_interval_data['type'] === 'custom') {
+    $t_note = sprintf(
+        plugin_lang_get('note_custom'),
+        date('Y-m-d H:i', $t_new_due_date),
         date('Y-m-d H:i', $t_current_due_date)
     );
 } else {
