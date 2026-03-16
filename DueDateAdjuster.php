@@ -9,7 +9,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
     public function register() {
         $this->name = 'Due Date Adjuster';
         $this->description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
-        $this->version = '1.0.0';
+        $this->version = '1.1.0';
         $this->requires = array(
             'MantisCore' => '2.0.0',
         );
