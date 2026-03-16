@@ -50,7 +50,8 @@ function add_month_with_clamp(DateTime $date, $months) {
 }
 
 $t_current_due_date = $t_bug->due_date;
-$t_has_time = !empty($t_current_due_date);
+$t_has_time = $t_current_due_date > 1;
+
 $t_hour = $t_has_time ? (int)date('H', $t_current_due_date) : 12;
 $t_minute = $t_has_time ? (int)date('i', $t_current_due_date) : 0;
 
