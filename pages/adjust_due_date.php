@@ -68,6 +68,7 @@ $t_interval_map = array(
     'saturday' => array('type' => 'day_of_week', 'day' => 6, 'text' => plugin_lang_get('push_saturday')),
     'sunday' => array('type' => 'day_of_week', 'day' => 0, 'text' => plugin_lang_get('push_sunday')),
     'monday' => array('type' => 'day_of_week', 'day' => 1, 'text' => plugin_lang_get('push_monday')),
+    '2days' => array('type' => 'modify', 'modifier' => '+2 days', 'text' => plugin_lang_get('push_2days')),
     '1week' => array('type' => 'modify', 'modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
     '2weeks' => array('type' => 'modify', 'modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),
     '4weeks' => array('type' => 'modify', 'modifier' => '+4 weeks', 'text' => plugin_lang_get('push_4weeks')),
@@ -131,13 +132,23 @@ if ($t_interval_data['type'] === 'now') {
 } elseif ($t_interval_data['type'] === 'cleanup') {
     // No date calculation needed for cleanup
 } elseif ($t_interval_data['type'] === 'add_months') {
-    $t_datetime = new DateTime();
-    $t_datetime->setTimestamp($t_current_due_date);
+    if ($t_has_time) {
+        $t_datetime = new DateTime();
+        $t_datetime->setTimestamp($t_current_due_date);
+    } else {
+        $t_datetime = new DateTime('today');
+        $t_datetime->setTime($t_hour, $t_minute, 0);
+    }
     add_month_with_clamp($t_datetime, $t_interval_data['months']);
     $t_new_due_date = $t_datetime->getTimestamp();
 } else {
-    $t_datetime = new DateTime();
-    $t_datetime->setTimestamp($t_current_due_date);
+    if ($t_has_time) {
+        $t_datetime = new DateTime();
+        $t_datetime->setTimestamp($t_current_due_date);
+    } else {
+        $t_datetime = new DateTime('today');
+        $t_datetime->setTime($t_hour, $t_minute, 0);
+    }
     $t_datetime->modify($t_interval_data['modifier']);
     $t_new_due_date = $t_datetime->getTimestamp();
 }

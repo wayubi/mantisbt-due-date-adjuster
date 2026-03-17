@@ -9,7 +9,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
     public function register() {
         $this->name = 'Due Date Adjuster';
         $this->description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
-        $this->version = '1.3';
+        $this->version = '1.4';
         $this->requires = array(
             'MantisCore' => '2.0.0',
         );
@@ -56,6 +56,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             'saturday' => plugin_lang_get('push_saturday'),
             'sunday' => plugin_lang_get('push_sunday'),
             'monday' => plugin_lang_get('push_monday'),
+            '2days' => plugin_lang_get('push_2days'),
             '1week' => plugin_lang_get('push_1week'),
             '2weeks' => plugin_lang_get('push_2weeks'),
             '4weeks' => plugin_lang_get('push_4weeks'),
@@ -89,6 +90,7 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             'saturday' => 'Set due date to Saturday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'sunday' => 'Set due date to Sunday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
             'monday' => 'Set due date to Monday at ' . ($t_has_time ? $t_time_str : 'noon') . '?',
+            '2days' => plugin_lang_get('confirm_2days'),
             '1week' => plugin_lang_get('confirm_1week'),
             '2weeks' => plugin_lang_get('confirm_2weeks'),
             '4weeks' => plugin_lang_get('confirm_4weeks'),
@@ -111,6 +113,9 @@ class DueDateAdjusterPlugin extends MantisPlugin {
                 $html .= '<li class="divider"></li>';
             }
             if ($t_interval === 'friday') {
+                $html .= '<li class="divider"></li>';
+            }
+            if ($t_interval === '2days') {
                 $html .= '<li class="divider"></li>';
             }
             if ($t_interval === '1week') {
