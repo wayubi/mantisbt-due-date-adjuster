@@ -68,6 +68,7 @@ $t_interval_map = array(
     'saturday' => array('type' => 'day_of_week', 'day' => 6, 'text' => plugin_lang_get('push_saturday')),
     'sunday' => array('type' => 'day_of_week', 'day' => 0, 'text' => plugin_lang_get('push_sunday')),
     'monday' => array('type' => 'day_of_week', 'day' => 1, 'text' => plugin_lang_get('push_monday')),
+    '1day' => array('type' => 'modify', 'modifier' => '+1 day', 'text' => plugin_lang_get('push_1day')),
     '2days' => array('type' => 'modify', 'modifier' => '+2 days', 'text' => plugin_lang_get('push_2days')),
     '1week' => array('type' => 'modify', 'modifier' => '+1 week', 'text' => plugin_lang_get('push_1week')),
     '2weeks' => array('type' => 'modify', 'modifier' => '+2 weeks', 'text' => plugin_lang_get('push_2weeks')),

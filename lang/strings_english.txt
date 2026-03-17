@@ -7,6 +7,7 @@
 $s_plugin_DueDateAdjuster_title = 'Due Date Adjuster';
 $s_plugin_DueDateAdjuster_description = 'Allows quick adjustment of due dates by adding 1 week, 2 weeks, or 1 month';
 
+$s_plugin_DueDateAdjuster_push_1day = '+1 Day';
 $s_plugin_DueDateAdjuster_push_2days = '+2 Days';
 $s_plugin_DueDateAdjuster_push_1week = '+1 Week';
 $s_plugin_DueDateAdjuster_push_2weeks = '+2 Weeks';
@@ -31,6 +32,7 @@ $s_plugin_DueDateAdjuster_push_custom = 'Custom';
 $s_plugin_DueDateAdjuster_push_cleanup = 'Trim Notes';
 
 $s_plugin_DueDateAdjuster_confirm_now = 'Set due date to now?';
+$s_plugin_DueDateAdjuster_confirm_1day = 'Push due date forward by 1 day?';
 $s_plugin_DueDateAdjuster_confirm_2days = 'Push due date forward by 2 days?';
 $s_plugin_DueDateAdjuster_confirm_custom = 'Set custom due date?';
 $s_plugin_DueDateAdjuster_confirm_cleanup = 'Keep only the 3 most recent due date notes?';
