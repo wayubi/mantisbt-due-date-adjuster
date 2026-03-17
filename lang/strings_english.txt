@@ -12,6 +12,7 @@ $s_plugin_DueDateAdjuster_push_2weeks = '+2 Weeks';
 $s_plugin_DueDateAdjuster_push_4weeks = '+4 Weeks';
 $s_plugin_DueDateAdjuster_push_1month = '+1 Month';
 $s_plugin_DueDateAdjuster_push_3months = '+3 Months';
+$s_plugin_DueDateAdjuster_push_6months = '+6 Months';
 $s_plugin_DueDateAdjuster_push_1year = '+1 Year';
 $s_plugin_DueDateAdjuster_push_now = 'Now';
 $s_plugin_DueDateAdjuster_push_morning = 'Morning';
