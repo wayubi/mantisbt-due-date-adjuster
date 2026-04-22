@@ -45,3 +45,15 @@ $s_plugin_DueDateAdjuster_note = 'Due date pushed forward by %s (from %s to %s)'
 $s_plugin_DueDateAdjuster_note_now = 'Due date set to now (was %s)';
 $s_plugin_DueDateAdjuster_note_custom = 'Due date set to %s (was %s)';
 $s_plugin_DueDateAdjuster_note_cleanup = 'Trimmed due date history (kept 3 most recent)';
+$s_plugin_DueDateAdjuster_note_irs = 'Due date set to IRS %s deadline (was %s)';
+
+$s_plugin_DueDateAdjuster_push_irs_q1 = 'IRS Q1 (Apr 15)';
+$s_plugin_DueDateAdjuster_push_irs_q2 = 'IRS Q2 (Jun 15)';
+$s_plugin_DueDateAdjuster_push_irs_q3 = 'IRS Q3 (Sep 15)';
+$s_plugin_DueDateAdjuster_push_irs_q4 = 'IRS Q4 (Jan 15)';
+
+$s_plugin_DueDateAdjuster_confirm_irs_q1 = 'Set due date to IRS Q1 deadline (April 15)?';
+$s_plugin_DueDateAdjuster_confirm_irs_q2 = 'Set due date to IRS Q2 deadline (June 15)?';
+$s_plugin_DueDateAdjuster_confirm_irs_q3 = 'Set due date to IRS Q3 deadline (September 15)?';
+$s_plugin_DueDateAdjuster_confirm_irs_q4 = 'Set due date to IRS Q4 deadline (January 15)?';
+?>;

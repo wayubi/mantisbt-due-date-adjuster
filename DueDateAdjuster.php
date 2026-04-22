@@ -16,6 +16,15 @@ class DueDateAdjusterPlugin extends MantisPlugin {
         $this->author = 'W. Latif Ayubi';
     }
     
+    function resources($p_event) {
+        return '<style>
+            .duedate-adjuster .caret {
+                border-top-color: #6688a6 !important;
+                border-bottom-color: #6688a6 !important;
+            }
+        </style>';
+    }
+    
     public function hooks() {
         return array(
             'EVENT_MENU_ISSUE' => 'menu_issue',
@@ -66,6 +75,10 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '3month' => plugin_lang_get('push_3months'),
             '6month' => plugin_lang_get('push_6months'),
             '1year' => plugin_lang_get('push_1year'),
+            'irs_q1' => plugin_lang_get('push_irs_q1'),
+            'irs_q2' => plugin_lang_get('push_irs_q2'),
+            'irs_q3' => plugin_lang_get('push_irs_q3'),
+            'irs_q4' => plugin_lang_get('push_irs_q4'),
         );
         
         $t_current_due_date = $t_bug->due_date;
@@ -102,6 +115,10 @@ class DueDateAdjusterPlugin extends MantisPlugin {
             '3month' => plugin_lang_get('confirm_3months'),
             '6month' => plugin_lang_get('confirm_6months'),
             '1year' => plugin_lang_get('confirm_1year'),
+            'irs_q1' => plugin_lang_get('confirm_irs_q1'),
+            'irs_q2' => plugin_lang_get('confirm_irs_q2'),
+            'irs_q3' => plugin_lang_get('confirm_irs_q3'),
+            'irs_q4' => plugin_lang_get('confirm_irs_q4'),
         );
         
         $t_page = plugin_page('adjust_due_date');
@@ -123,6 +140,9 @@ class DueDateAdjusterPlugin extends MantisPlugin {
                 $html .= '<li class="divider"></li>';
             }
             if ($t_interval === '1week') {
+                $html .= '<li class="divider"></li>';
+            }
+            if ($t_interval === 'irs_q1') {
                 $html .= '<li class="divider"></li>';
             }
             $t_confirm = $t_confirm_strings[$t_interval];

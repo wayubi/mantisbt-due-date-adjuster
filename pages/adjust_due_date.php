@@ -78,6 +78,10 @@ $t_interval_map = array(
     '3month' => array('type' => 'add_months', 'months' => 3, 'text' => plugin_lang_get('push_3months')),
     '6month' => array('type' => 'add_months', 'months' => 6, 'text' => plugin_lang_get('push_6months')),
     '1year' => array('type' => 'modify', 'modifier' => '+1 year', 'text' => plugin_lang_get('push_1year')),
+    'irs_q1' => array('type' => 'irs_quarter', 'month' => 4, 'day' => 15, 'label' => 'Q1', 'text' => plugin_lang_get('push_irs_q1')),
+    'irs_q2' => array('type' => 'irs_quarter', 'month' => 6, 'day' => 15, 'label' => 'Q2', 'text' => plugin_lang_get('push_irs_q2')),
+    'irs_q3' => array('type' => 'irs_quarter', 'month' => 9, 'day' => 15, 'label' => 'Q3', 'text' => plugin_lang_get('push_irs_q3')),
+    'irs_q4' => array('type' => 'irs_quarter', 'month' => 1, 'day' => 15, 'label' => 'Q4', 'text' => plugin_lang_get('push_irs_q4')),
     'custom' => array('type' => 'custom', 'text' => plugin_lang_get('push_custom')),
     'cleanup' => array('type' => 'cleanup', 'text' => plugin_lang_get('push_cleanup')),
 );
@@ -130,6 +134,24 @@ if ($t_interval_data['type'] === 'now') {
     $f_date = gpc_get_string('date');
     $f_time = gpc_get_string('time');
     $t_datetime = new DateTime($f_date . ' ' . $f_time);
+    $t_new_due_date = $t_datetime->getTimestamp();
+} elseif ($t_interval_data['type'] === 'irs_quarter') {
+    $today = new DateTime();
+    $targetYear = (int)$today->format('Y');
+    $currentMonth = (int)$today->format('n');
+    $currentDay = (int)$today->format('j');
+    $targetMonth = $t_interval_data['month'];
+    $targetDay = $t_interval_data['day'];
+    
+    // Determine if deadline has passed this year
+    if ($currentMonth > $targetMonth || 
+        ($currentMonth === $targetMonth && $currentDay > $targetDay)) {
+        $targetYear++;
+    }
+    
+    $t_datetime = new DateTime();
+    $t_datetime->setDate($targetYear, $targetMonth, $targetDay);
+    $t_datetime->setTime($t_hour, $t_minute, 0);
     $t_new_due_date = $t_datetime->getTimestamp();
 } elseif ($t_interval_data['type'] === 'cleanup') {
     // No date calculation needed for cleanup
@@ -207,6 +229,12 @@ if ($t_interval_data['type'] === 'now') {
     $t_note = sprintf(
         plugin_lang_get('note_custom'),
         date('Y-m-d H:i', $t_new_due_date),
+        date('Y-m-d H:i', $t_current_due_date)
+    ) . $t_note_tag;
+} elseif ($t_interval_data['type'] === 'irs_quarter') {
+    $t_note = sprintf(
+        plugin_lang_get('note_irs'),
+        $t_interval_data['label'],
         date('Y-m-d H:i', $t_current_due_date)
     ) . $t_note_tag;
 } elseif ($t_interval_data['type'] === 'cleanup') {
