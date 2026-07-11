@@ -56,4 +56,3 @@ $s_plugin_DueDateAdjuster_confirm_irs_q1 = 'Set due date to IRS Q1 deadline (Apr
 $s_plugin_DueDateAdjuster_confirm_irs_q2 = 'Set due date to IRS Q2 deadline (June 15)?';
 $s_plugin_DueDateAdjuster_confirm_irs_q3 = 'Set due date to IRS Q3 deadline (September 15)?';
 $s_plugin_DueDateAdjuster_confirm_irs_q4 = 'Set due date to IRS Q4 deadline (January 15)?';
-?>;
